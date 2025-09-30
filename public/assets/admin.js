@@ -50,9 +50,11 @@ document.addEventListener('DOMContentLoaded', async ()=>{
   document.getElementById('auth-form').addEventListener('submit', async (e)=>{
     e.preventDefault();
     token = document.getElementById('admin-token').value.trim();
+    localStorage.setItem('admin_token', token);
     try{
       await loadWallets();
       await loadExchanges();
+      await refreshTg();
       alert('OK');
     }catch(err){
       alert('Ошибка авторизации или сети');
@@ -76,13 +78,16 @@ document.addEventListener('DOMContentLoaded', async ()=>{
       document.getElementById('tg-current').textContent = s.telegram_executor ? `Текущий: @${s.telegram_executor}` : 'Не задан';
     }catch{}
   };
-  await refreshTg();
   document.getElementById('tg-form').addEventListener('submit', async (e)=>{
     e.preventDefault();
     const username = document.getElementById('tg-username').value.trim();
-    await api('/api/admin/settings/telegram', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ username }) });
-    await refreshTg();
-    alert('Сохранено');
+    try{
+      await api('/api/admin/settings/telegram', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ username }) });
+      await refreshTg();
+      alert('Сохранено');
+    }catch(err){
+      alert('Ошибка сохранения Telegram');
+    }
   });
 
   // поиск
@@ -119,6 +124,18 @@ document.addEventListener('DOMContentLoaded', async ()=>{
       box.appendChild(delBtn);
     }
   });
+
+  // авто-авторизация по сохранённому токену
+  const saved = localStorage.getItem('admin_token');
+  if(saved){
+    token = saved;
+    document.getElementById('admin-token').value = saved;
+    try{
+      await loadWallets();
+      await loadExchanges();
+      await refreshTg();
+    }catch{}
+  }
 });
 
 
