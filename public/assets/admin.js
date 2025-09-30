@@ -69,6 +69,22 @@ document.addEventListener('DOMContentLoaded', ()=>{
     alert('Сохранено');
   });
 
+  // telegram executor settings
+  const refreshTg = async ()=>{
+    try{
+      const s = await api('/api/admin/settings');
+      document.getElementById('tg-current').textContent = s.telegram_executor ? `Текущий: @${s.telegram_executor}` : 'Не задан';
+    }catch{}
+  };
+  await refreshTg();
+  document.getElementById('tg-form').addEventListener('submit', async (e)=>{
+    e.preventDefault();
+    const username = document.getElementById('tg-username').value.trim();
+    await api('/api/admin/settings/telegram', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ username }) });
+    await refreshTg();
+    alert('Сохранено');
+  });
+
   // поиск
   const searchForm = document.createElement('form');
   searchForm.className = 'form-row';

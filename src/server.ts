@@ -16,7 +16,10 @@ const server = http.createServer(app);
 
 const PORT = process.env.PORT ? Number(process.env.PORT) : 3000;
 const ADMIN_TOKEN = process.env.ADMIN_TOKEN || "dev-admin-token";
-const TELEGRAM_EXECUTOR = process.env.TELEGRAM_EXECUTOR || process.env.TELEGRAM_HANDLE || "your_telegram";
+function getTelegramExecutor(): string {
+    const row = db.prepare("SELECT value FROM settings WHERE key = 'telegram_executor'").get() as { value: string } | undefined;
+    return row?.value || process.env.TELEGRAM_EXECUTOR || process.env.TELEGRAM_HANDLE || "your_telegram";
+}
 
 app.use(helmet());
 app.use(compression());
@@ -116,7 +119,7 @@ app.post("/api/exchange", (req, res) => {
         "INSERT INTO exchanges (id, userId, fromCurrency, network, toType, amountUsd, status, createdAt) VALUES (?, ?, ?, ?, ?, ?, 'pending', ?)"
     ).run(id, userId, fromCurrency, network, toType, amountUsd, now);
 
-    res.json({ exchangeId: id, walletAddress: wallet.address, telegram: TELEGRAM_EXECUTOR, note: toType === "CASH_RU" ? "Внимание: повышенная комиссия на наличные из-за логистики." : undefined });
+    res.json({ exchangeId: id, walletAddress: wallet.address, telegram: getTelegramExecutor(), note: toType === "CASH_RU" ? "Внимание: повышенная комиссия на наличные из-за логистики." : undefined });
 });
 
 // Admin: list exchanges
@@ -137,6 +140,22 @@ app.post("/api/admin/exchanges/:id/status", requireAdmin, (req, res) => {
     if (!status) return res.status(400).json({ error: "status required" });
     db.prepare("UPDATE exchanges SET status = ? WHERE id = ?").run(status, id);
     res.json({ ok: true });
+});
+
+// Admin: set telegram executor username
+app.post("/api/admin/settings/telegram", requireAdmin, (req, res) => {
+    const { username } = req.body as { username?: string };
+    if (!username) return res.status(400).json({ error: "username required" });
+    const now = new Date().toISOString();
+    db.prepare(
+        "INSERT INTO settings (key, value, updatedAt) VALUES ('telegram_executor', ?, ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value, updatedAt = excluded.updatedAt"
+    ).run(username.replace(/^@/, ""), now);
+    res.json({ ok: true });
+});
+
+app.get("/api/admin/settings", requireAdmin, (req, res) => {
+    const row = db.prepare("SELECT value FROM settings WHERE key = 'telegram_executor'").get() as { value: string } | undefined;
+    res.json({ telegram_executor: row?.value || null });
 });
 
 // Delete exchange (admin)

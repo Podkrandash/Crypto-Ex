@@ -48,6 +48,12 @@ CREATE TABLE IF NOT EXISTS wallets (
   updatedAt TEXT NOT NULL,
   UNIQUE(currency, network)
 );
+
+CREATE TABLE IF NOT EXISTS settings (
+  key TEXT PRIMARY KEY,
+  value TEXT NOT NULL,
+  updatedAt TEXT NOT NULL
+);
 `);
 
 
