@@ -33,7 +33,7 @@ async function createExchange(ev){
   }
   exchangeId = data.exchangeId;
   result.hidden = false;
-  result.innerHTML = `Адрес для перевода: <b>${data.walletAddress}</b>${data.note ? '<br>'+data.note : ''}`;
+  result.innerHTML = `Комиссия сервиса: <b>10%</b><br>Номер заявки: <span class="highlight">${exchangeId}</span><br>Адрес для перевода: <span class="highlight">${data.walletAddress}</span>${data.note ? '<br>'+data.note : ''}`;
   showTelegram(data.telegram);
 }
 
