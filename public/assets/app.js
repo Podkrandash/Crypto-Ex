@@ -48,7 +48,7 @@ function showTelegram(tg){
   const sec = document.getElementById('tg-info');
   const box = document.getElementById('tg-box');
   sec.hidden = false;
-  box.innerHTML = `Ваш номер заявки: <b>${exchangeId}</b><br>Напишите в Telegram исполнителю: <b>@${tg}</b> и укажите номер заявки.`;
+  box.innerHTML = `Контакт исполнителя: <span class="highlight-large">@${tg}</span><br>Ваш номер заявки: <span class=\"highlight\">${exchangeId}</span><br>Напишите в Telegram и укажите номер заявки.`;
 }
 
 const i18n = {
