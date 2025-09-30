@@ -6,7 +6,7 @@ import helmet from "helmet";
 import compression from "compression";
 import morgan from "morgan";
 import cookieParser from "cookie-parser";
-import { v4 as uuidv4 } from "uuid";
+import { randomUUID } from "crypto";
 import { db } from "./db";
 import { FiatType } from "./types";
 import path from "path";
@@ -35,7 +35,7 @@ function getOrCreateUserId(req: express.Request, res: express.Response): { userI
         const row = db.prepare("SELECT id, username FROM users WHERE id = ?").get(cookieId) as { id: string; username: string } | undefined;
         if (row) return { userId: row.id, username: row.username };
     }
-    const id = uuidv4();
+    const id = randomUUID();
     const username = `user_${id.slice(0, 8)}`;
     const now = new Date().toISOString();
     db.prepare("INSERT INTO users (id, username, createdAt) VALUES (?, ?, ?)").run(id, username, now);
@@ -67,7 +67,7 @@ app.post("/api/admin/wallets", requireAdmin, (req, res) => {
     const { currency, network, address } = req.body as { currency?: string; network?: string; address?: string };
     if (!currency || !network || !address) return res.status(400).json({ error: "currency, network, address required" });
     const now = new Date().toISOString();
-    const id = uuidv4();
+    const id = randomUUID();
     const upsert = db.prepare(
         "INSERT INTO wallets (id, currency, network, address, updatedAt) VALUES (?, ?, ?, ?, ?) " +
         "ON CONFLICT(currency, network) DO UPDATE SET address = excluded.address, updatedAt = excluded.updatedAt"
