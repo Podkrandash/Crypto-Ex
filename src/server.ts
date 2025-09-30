@@ -110,7 +110,7 @@ app.post("/api/exchange", (req, res) => {
     const wallet = db.prepare("SELECT address FROM wallets WHERE currency = ? AND network = ?").get(fromCurrency, network) as { address: string } | undefined;
     if (!wallet) return res.status(400).json({ error: "Кошелёк не настроен админом" });
 
-    const id = uuidv4();
+    const id = randomUUID();
     const now = new Date().toISOString();
     db.prepare(
         "INSERT INTO exchanges (id, userId, fromCurrency, network, toType, amountUsd, status, createdAt) VALUES (?, ?, ?, ?, ?, ?, 'pending', ?)"
