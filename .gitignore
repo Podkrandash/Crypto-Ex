@@ -14,3 +14,11 @@ Thumbs.db
 *.tmp
 *.swp
 *.lock
+
+# Bot folder ignores
+/bot/node_modules/
+/bot/.env
+/bot/.env.*
+/bot/npm-debug.log*
+/bot/assets/*.psd
+/bot/assets/*.ai
