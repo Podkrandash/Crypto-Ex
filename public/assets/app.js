@@ -53,6 +53,13 @@ function showTelegram(tg){
 
 document.addEventListener('DOMContentLoaded', async ()=>{
   await bootstrap();
+  try{
+    if(window?.Telegram?.WebApp){
+      const tg = window.Telegram.WebApp;
+      tg.expand(); // просим телеграм развернуть мини-апп на максимум
+      tg.disableVerticalSwipes?.(); // пытаемся отключить жест сворачивания, если доступно
+    }
+  }catch(e){}
   document.getElementById('toType').addEventListener('change', showCashWarning);
   showCashWarning();
   document.getElementById('exchange-form').addEventListener('submit', createExchange);
