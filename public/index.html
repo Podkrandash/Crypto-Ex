@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CryptoExchanger</title>
+  <link rel="stylesheet" href="/assets/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+  <script defer src="/assets/app.js"></script>
+  
+  <style>
+    body { font-family: 'VT323', monospace; }
+  </style>
+  </head>
+<body>
+  <header class="header">
+    <div class="container">
+      <h1>CRYPTO EXCHANGER 2.0</h1>
+      <p class="subtitle">ретро web2 стиль • без регистрации</p>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <h2>Создать обмен</h2>
+      <form id="exchange-form" class="form-grid">
+        <label>
+          Криптовалюта
+          <select id="fromCurrency" required>
+            <option value="USDT">USDT</option>
+          </select>
+        </label>
+        <label>
+          Сеть
+          <select id="network" required>
+            <option value="TRC-20">TRC-20</option>
+            <option value="ERC-20">ERC-20</option>
+          </select>
+        </label>
+        <label>
+          Получить
+          <select id="toType" required>
+            <option value="RUB">RUB</option>
+            <option value="USD">USD</option>
+            <option value="CASH_RU">Наличные по РФ</option>
+          </select>
+        </label>
+        <label>
+          Сумма, $ (лимиты: 10–10 000; для наличных минимум 100)
+          <input id="amountUsd" type="number" min="1" step="1" required>
+        </label>
+        <button class="btn" type="submit">Обменять</button>
+      </form>
+      <p id="cash-warning" class="warning" hidden>
+        Важно: при выборе наличных комиссия выше, т.к. деньги отправляются доверенному лицу для личной передачи. Работаем локально и безопасно, без посредников.
+      </p>
+      <div id="result" class="result" hidden></div>
+    </section>
+
+    <section id="tg-info" class="card" hidden>
+      <h2>Связь в Telegram</h2>
+      <div id="tg-box" class="result"></div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">© 2000–2025 CryptoExchanger</div>
+  </footer>
+</body>
+</html>
+
+

@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin • CryptoExchanger</title>
+  <link rel="stylesheet" href="/assets/style.css">
+  <script defer src="/assets/admin.js"></script>
+</head>
+<body>
+  <header class="header">
+    <div class="container">
+      <h1>ADMIN PANEL</h1>
+      <p class="subtitle">кошельки • заявки • чат</p>
+    </div>
+  </header>
+
+  <main class="container admin-grid">
+    <section class="card">
+      <h2>Авторизация</h2>
+      <form id="auth-form" class="form-row">
+        <input id="admin-token" type="password" placeholder="ADMIN_TOKEN" required>
+        <button class="btn" type="submit">Войти</button>
+      </form>
+    </section>
+
+    <section class="card">
+      <h2>Кошельки</h2>
+      <form id="wallet-form" class="form-grid">
+        <input id="w-currency" placeholder="USDT" required>
+        <input id="w-network" placeholder="TRC-20" required>
+        <input id="w-address" placeholder="Адрес" required>
+        <button class="btn" type="submit">Сохранить</button>
+      </form>
+      <div id="wallets"></div>
+    </section>
+
+    <section class="card">
+      <h2>Заявки</h2>
+      <div id="exchanges" class="scroll-pane"></div>
+    </section>
+
+    
+  </main>
+
+  <footer class="footer">
+    <div class="container">© 2000–2025 CryptoExchanger Admin</div>
+  </footer>
+</body>
+</html>
+
+
