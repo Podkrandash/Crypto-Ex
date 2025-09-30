@@ -46,7 +46,7 @@ async function loadExchanges(){
 
 // чат удалён
 
-document.addEventListener('DOMContentLoaded', ()=>{
+document.addEventListener('DOMContentLoaded', async ()=>{
   document.getElementById('auth-form').addEventListener('submit', async (e)=>{
     e.preventDefault();
     token = document.getElementById('admin-token').value.trim();
