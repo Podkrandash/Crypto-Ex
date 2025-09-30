@@ -23,6 +23,8 @@ select,input{padding:10px;border:1px solid var(--acc);background:#060606;color:v
 @media(max-width:600px){
   .form-grid{grid-template-columns:1fr}
   h1{font-size:32px}
+  body{padding-top:30px}
+  input, select, textarea, button { font-size:16px }
 }
 
 
