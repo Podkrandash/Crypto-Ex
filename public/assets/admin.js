@@ -7,6 +7,39 @@ async function api(path, options={}){
   return res.json();
 }
 
+function showToast(text){
+  const el = document.createElement('div');
+  el.className = 'toast';
+  el.textContent = text;
+  document.body.appendChild(el);
+  setTimeout(()=>{ el.remove(); }, 2200);
+}
+
+function confirmModal(message){
+  return new Promise((resolve)=>{
+    const backdrop = document.createElement('div');
+    backdrop.className = 'modal-backdrop';
+    const modal = document.createElement('div');
+    modal.className = 'modal';
+    modal.innerHTML = `<div>${message}</div>`;
+    const actions = document.createElement('div');
+    actions.className = 'actions';
+    const cancel = document.createElement('button');
+    cancel.className = 'btn secondary';
+    cancel.textContent = 'Отмена';
+    const ok = document.createElement('button');
+    ok.className = 'btn';
+    ok.textContent = 'Подтвердить';
+    actions.appendChild(cancel);
+    actions.appendChild(ok);
+    modal.appendChild(actions);
+    backdrop.appendChild(modal);
+    document.body.appendChild(backdrop);
+    cancel.addEventListener('click', ()=>{ backdrop.remove(); resolve(false); });
+    ok.addEventListener('click', ()=>{ backdrop.remove(); resolve(true); });
+  });
+}
+
 async function loadWallets(){
   const list = await api('/api/admin/wallets');
   const box = document.getElementById('wallets');
@@ -33,9 +66,11 @@ async function loadExchanges(){
     delBtn.className = 'btn';
     delBtn.textContent = 'Удалить';
     delBtn.addEventListener('click', async ()=>{
-      if(!confirm('Удалить заявку?')) return;
+      const ok = await confirmModal('Удалить заявку?');
+      if(!ok) return;
       await api(`/api/admin/exchanges/${e.id}`, { method:'DELETE' });
       await loadExchanges();
+      showToast('Удалено');
     });
     actionRow.appendChild(delBtn);
     div.appendChild(info);
@@ -55,9 +90,9 @@ document.addEventListener('DOMContentLoaded', async ()=>{
       await loadWallets();
       await loadExchanges();
       await refreshTg();
-      alert('OK');
+      showToast('Авторизовано');
     }catch(err){
-      alert('Ошибка авторизации или сети');
+      showToast('Ошибка авторизации');
     }
   });
 
@@ -68,7 +103,7 @@ document.addEventListener('DOMContentLoaded', async ()=>{
     const address = document.getElementById('w-address').value.trim();
     await api('/api/admin/wallets', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ currency, network, address })});
     await loadWallets();
-    alert('Сохранено');
+    showToast('Сохранено');
   });
 
   // telegram executor settings
@@ -84,9 +119,9 @@ document.addEventListener('DOMContentLoaded', async ()=>{
     try{
       await api('/api/admin/settings/telegram', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ username }) });
       await refreshTg();
-      alert('Сохранено');
+      showToast('Telegram обновлён');
     }catch(err){
-      alert('Ошибка сохранения Telegram');
+      showToast('Ошибка сохранения Telegram');
     }
   });
 
@@ -116,9 +151,11 @@ document.addEventListener('DOMContentLoaded', async ()=>{
       delBtn.className = 'btn';
       delBtn.textContent = 'Удалить';
       delBtn.addEventListener('click', async ()=>{
-        if(!confirm('Удалить заявку?')) return;
+        const ok = await confirmModal('Удалить заявку?');
+        if(!ok) return;
         await api(`/api/admin/exchanges/${e.id}`, { method:'DELETE' });
         await loadExchanges();
+        showToast('Удалено');
       });
       box.appendChild(div);
       box.appendChild(delBtn);
