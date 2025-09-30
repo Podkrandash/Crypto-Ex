@@ -15,56 +15,58 @@
 <body>
   <header class="header">
     <div class="container">
-      <h1>CRYPTO EXCHANGER 2.0</h1>
-      <p class="subtitle">ретро web2 стиль • без регистрации</p>
+      <div class="lang-switch">
+        <button id="lang-ru" class="flag" title="Русский">🇷🇺</button>
+        <button id="lang-en" class="flag" title="English">🇬🇧</button>
+      </div>
+      <h1 id="t-title">CRYPTO EXCHANGER 2.0</h1>
+      <p id="t-subtitle" class="subtitle">ретро web2 стиль • без регистрации</p>
     </div>
   </header>
 
   <main class="container">
     <section class="card">
-      <h2>Создать обмен</h2>
+      <h2 id="t-create">Создать обмен</h2>
       <form id="exchange-form" class="form-grid">
         <label>
-          Криптовалюта
+          <span id="t-crypto">Криптовалюта</span>
           <select id="fromCurrency" required>
             <option value="USDT">USDT</option>
           </select>
         </label>
         <label>
-          Сеть
+          <span id="t-network">Сеть</span>
           <select id="network" required>
             <option value="TRC-20">TRC-20</option>
             <option value="ERC-20">ERC-20</option>
           </select>
         </label>
         <label>
-          Получить
+          <span id="t-get">Получить</span>
           <select id="toType" required>
             <option value="RUB">RUB</option>
             <option value="USD">USD</option>
-            <option value="CASH_RU">Наличные по РФ</option>
+            <option value="CASH_RU" id="t-cash">Наличные по РФ</option>
           </select>
         </label>
         <label>
-          Сумма, $ (лимиты: 10–10 000; для наличных минимум 100)
+          <span id="t-amountLabel">Сумма, $ (лимиты: 10–10 000; для наличных минимум 100)</span>
           <input id="amountUsd" type="number" min="1" step="1" required>
         </label>
-        <button class="btn" type="submit">Обменять</button>
+        <button id="t-submit" class="btn" type="submit">Обменять</button>
       </form>
-      <p id="cash-warning" class="warning" hidden>
-        Важно: при выборе наличных комиссия выше, т.к. деньги отправляются доверенному лицу для личной передачи. Работаем локально и безопасно, без посредников.
-      </p>
+      <p id="cash-warning" class="warning" hidden></p>
       <div id="result" class="result" hidden></div>
     </section>
 
     <section id="tg-info" class="card" hidden>
-      <h2>Связь в Telegram</h2>
+      <h2 id="t-tg-title">Связь в Telegram</h2>
       <div id="tg-box" class="result"></div>
     </section>
   </main>
 
   <footer class="footer">
-    <div class="container">© 2000–2025 CryptoExchanger</div>
+    <div class="container" id="t-footer">© 2000–2025 CryptoExchanger</div>
   </footer>
 </body>
 </html>
